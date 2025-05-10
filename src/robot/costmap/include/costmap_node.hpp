@@ -2,15 +2,23 @@
 #define COSTMAP_NODE_HPP_
 
 #include "rclcpp/rclcpp.hpp"
-
+#include "sensor_msgs/msg/laser_scan.hpp"
+#include "nav_msgs/msg/occupancy_grid.hpp"
+#include "geometry_msgs/msg/pose.hpp"
 #include "costmap_core.hpp"
 
 class CostmapNode : public rclcpp::Node {
-  public:
-    CostmapNode();
+public:
+  CostmapNode();
 
-  private:
-    robot::CostmapCore costmap_;
+private:
+  void handleLaserScan(sensor_msgs::msg::LaserScan::SharedPtr msg);
+
+  rclcpp::Publisher<nav_msgs::msg::OccupancyGrid>::SharedPtr costmap_publisher_;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr laser_subscriber_;
+
+  robot::CostmapCore costmap_core_;
+  nav_msgs::msg::OccupancyGrid costmap_;
 };
 
-#endif 
+#endif  // COSTMAP_NODE_HPP_
